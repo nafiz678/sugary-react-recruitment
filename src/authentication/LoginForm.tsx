@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { AuthContext } from '../provider/AuthProvider';
 
 // Define form schema with zod
 const formSchema = z.object({
@@ -25,8 +26,7 @@ interface FormValues {
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const context = useContext(AuthContext)
   const navigate = useNavigate()
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -36,25 +36,30 @@ export default function LoginForm() {
     },
   });
 
+  const saveTokens = (accessToken: string, refreshToken: string) => {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+  };
+
   // Form submission handler
   const onSubmit = async (values: FormValues) => {
-    setIsLoading(true)
+    context?.setLoading(true)
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/AdminAccount/Login`, {
         UserName: values.email,
         Password: values.password
       })
-      console.log(res.data)
-      if(res.data) { 
-        toast.success("Login successful")
-        return navigate("/")
+      if (res.data) {
+        toast.success("Login successful");
+        saveTokens(res.data.Token, res.data.RefreshToken);
+        console.log(res.data)
+        return navigate("/");
       }
     } catch (error) {
       console.log(error)
-    } finally{
-      setIsLoading(false)
+    } finally {
+      context?.setLoading(false)
     }
-
   };
 
   const toggleShowPassword = () => {
@@ -77,7 +82,7 @@ export default function LoginForm() {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="react@test.com"
                 {...form.register("email")}
               />
               {form.formState.errors.email && (
@@ -122,7 +127,7 @@ export default function LoginForm() {
               onClick={form.handleSubmit(onSubmit)}
               className="w-full"
             >
-              {isLoading ? <Loader2 className="animate-spin"/> :"Login"}
+              {context?.loading ? <Loader2 className="animate-spin" /> : "Login"}
             </Button>
 
             <div className="mt-4 text-center text-sm">
