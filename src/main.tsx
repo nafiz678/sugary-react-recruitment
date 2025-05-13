@@ -8,6 +8,7 @@ import { Toaster } from 'sonner';
 import AuthProvider from './provider/AuthProvider.tsx';
 import PrivateRoute from './router/PrivetRoute.tsx';
 import { ThemeProvider } from './components/ui/theme/ThemeProvider.tsx';
+import { Analytics } from "@vercel/analytics/next"
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
         <Toaster />
+        <Analytics/>
       </ThemeProvider>
     </AuthProvider>
   </StrictMode>,
