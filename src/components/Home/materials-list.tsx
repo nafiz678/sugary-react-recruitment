@@ -5,6 +5,7 @@ import { MaterialCard } from "./material-card"
 import { Loader2 } from "lucide-react"
 import axios from "axios"
 import type { Material } from "@/lib/type"
+import { Button } from "../ui/button"
 
 
 
@@ -35,13 +36,12 @@ export default function MaterialsList() {
                     filter: btoa(JSON.stringify(filter)),
                 },
             });
-            setMaterials(response.data.Materials);
 
-            const data = await response.data
-
-            setMaterials((prev) => [...prev, ...data.Materials])
-            setHasMore(data.RemainingCount > 0)
-            setPage((prev) => prev + 1)
+        const data = response.data;
+        
+        setMaterials((prev) => [...prev, ...data.Materials]);
+        setHasMore(data.RemainingCount > 0);
+        setPage((prev) => prev + 1);
         } catch (err) {
             setError("Failed to load materials. Please try again later.")
             console.error("Error fetching materials:", err)
@@ -67,17 +67,17 @@ export default function MaterialsList() {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-red-500 mb-4">{error}</p>
-                <button
+                <Button
                     onClick={() => {
                         setError(null)
                         setPage(0)
                         setMaterials([])
                         fetchMaterials()
                     }}
-                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+                    className="px-4 py-2 rounded-md transition-colors"
                 >
                     Try Again
-                </button>
+                </Button>
             </div>
         )
     }

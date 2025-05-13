@@ -36,9 +36,11 @@ export default function LoginForm() {
     },
   });
 
-  const saveTokens = (accessToken: string, refreshToken: string) => {
+  const saveTokens = (accessToken: string, refreshToken: string, accessExpiry: string, refreshExpiry: string) => {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('accessExpiry', accessExpiry);
+    localStorage.setItem('refreshExpiry', refreshExpiry);
   };
 
   // Form submission handler
@@ -51,7 +53,9 @@ export default function LoginForm() {
       })
       if (res.data) {
         toast.success("Login successful");
-        saveTokens(res.data.Token, res.data.RefreshToken);
+        saveTokens(res.data.Token, res.data.RefreshToken, res.data.AccessTokenExpiresAt, res.data.RefreshTokenExpiresAt);
+        context?.setIsAuthenticated(true)
+        context?.setUser(res.data.User)
         console.log(res.data)
         return navigate("/");
       }

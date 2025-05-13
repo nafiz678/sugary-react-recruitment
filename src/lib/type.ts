@@ -24,11 +24,9 @@ export interface AuthInfo {
     loading: boolean;
     setLoading: Dispatch<SetStateAction<boolean>>;
     setUser: Dispatch<SetStateAction<User | null>>;
-    accessToken: string | null;
-    setAccessToken: Dispatch<SetStateAction<string | null>>
-    refreshToken: string | null;
-    setRefreshToken: Dispatch<SetStateAction<string | null>>;
-    Logout: ()=> void
+    Logout: ()=> void;
+    isAuthenticated: boolean;
+    setIsAuthenticated: Dispatch<SetStateAction<boolean>>
 }
 
 export interface Material {

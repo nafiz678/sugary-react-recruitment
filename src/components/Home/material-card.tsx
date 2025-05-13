@@ -37,7 +37,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
             className="group relative bg-white dark:bg-black border rounded-xl shadow-sm hover:shadow-md overflow-hidden transition-all "
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            // transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
