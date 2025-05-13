@@ -10,6 +10,7 @@ import { LoadingMaterials } from "./components/Home/loading-materials";
 import { Suspense, useContext, useEffect } from "react";
 import { ModeToggle } from "./components/ui/theme/ModeToggle";
 import { AuthContext } from "./provider/AuthProvider";
+import { inject } from '@vercel/analytics';
 
 
 function App() {
@@ -17,14 +18,19 @@ function App() {
   const loading = context?.loading
   const isAuthenticated = context?.loading
 
-    // You can add a redirect to login if not authenticated
-    useEffect(() => {
-      if ( !isAuthenticated) {
-        // Redirect to login page
-        // window.location.href = '/login';
-        console.log('User is not authenticated, should redirect to login');
-      }
-    }, [loading, isAuthenticated]);
+  // You can add a redirect to login if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // Redirect to login page
+      // window.location.href = '/login';
+      console.log('User is not authenticated, should redirect to login');
+    }
+  }, [loading, isAuthenticated]);
+
+
+  useEffect(() => {
+    inject();
+  }, []);
 
   return (
     <main>
